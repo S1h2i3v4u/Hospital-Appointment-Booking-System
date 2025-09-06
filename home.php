@@ -1,12 +1,12 @@
 <?php
-// Start session (optional, if you plan login system)
+// Start session
 session_start();
 
-// Database connection (update credentials below)
-$host = "localhost";   // or 127.0.0.1
-$username = "root";    // your MySQL username
-$password = "";        // your MySQL password
-$database = "medical"; // your database name
+// Database connection (optional for this page)
+$host = "localhost";
+$username = "root";
+$password = "";
+$database = "medical";
 
 // Create connection
 $conn = new mysqli($host, $username, $password, $database);
@@ -15,6 +15,9 @@ $conn = new mysqli($host, $username, $password, $database);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
+
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['email']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -211,20 +214,27 @@ if ($conn->connect_error) {
       <img src="img/figma.logo.png" alt="Medical Team Logo">
     </div>
     <nav>
-      <a href="home.php" data-page="home">Home</a>
-      <a href="upload.php" data-page="upload">Radiology</a>
-      <a href="aboutUs.php" data-page="about-us">About Us</a>
-      <a href="tips.php" data-page="health-tips">Health Tips</a>
+      <a href="home.php">Home</a>
+      <a href="upload.php">Radiology</a>
+      <a href="aboutUs.php">About Us</a>
+      <a href="tips.php">Health Tips</a>
 
-      <!-- Login Icon with text -->
-      <a href="login.php" class="login-link">
-        <i class="fas fa-user"></i> Log in
-      </a>
+      <!-- Login/Logout Dynamic -->
+      <?php if ($isLoggedIn): ?>
+        <a href="logout.php" class="login-link">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+      <?php else: ?>
+        <a href="login.php" class="login-link">
+          <i class="fas fa-user"></i> Log in
+        </a>
+      <?php endif; ?>
 
       <!-- Chatbot Icon -->
-      <button class="chatbot-btn">
-        <i class="fas fa-comment-dots"></i>
-      </button>
+     <button class="chatbot-btn" onclick="window.open('chatbot.php', '_blank')">
+  <i class="fas fa-comment-dots"></i>
+</button>
+
     </nav>
   </header>
 
